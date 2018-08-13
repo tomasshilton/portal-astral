@@ -13,5 +13,5 @@ public interface IEntity<T> {
 
     CompletionStage<String> insert(T entity);
 
-    CompletionStage<Optional<Student>> get(String id);
+    CompletionStage<Optional<T>> get(String id);
 }
