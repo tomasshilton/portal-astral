@@ -14,13 +14,13 @@ import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
-public class StudentEntity implements IEntity<Student>{
+public class StudentModule implements IModule<Student> {
 
     private final EbeanServer ebeanServer;
     private final DatabaseExecutionContext executionContext;
 
     @Inject
-    public StudentEntity(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
+    public StudentModule(EbeanConfig ebeanConfig, DatabaseExecutionContext executionContext) {
         this.ebeanServer = Ebean.getServer(ebeanConfig.defaultServer());
         this.executionContext = executionContext;
     }

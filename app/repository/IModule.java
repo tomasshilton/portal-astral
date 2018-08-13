@@ -5,7 +5,7 @@ import models.Student;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 
-public interface IEntity<T> {
+public interface IModule<T> {
 
     CompletionStage<Optional<Boolean>> update(String id, T entity);
 
@@ -13,5 +13,5 @@ public interface IEntity<T> {
 
     CompletionStage<String> insert(T entity);
 
-    CompletionStage<Optional<Student>> get(String id);
+    CompletionStage<Optional<T>> get(String id);
 }
