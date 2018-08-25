@@ -4,17 +4,22 @@ import io.ebean.Ebean;
 import io.ebean.EbeanServer;
 import io.ebean.Model;
 import io.ebean.Transaction;
+import models.Student;
 import models.Subject;
 import play.db.ebean.EbeanConfig;
+import play.libs.Json;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletionStage;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static play.mvc.Results.ok;
+import static play.mvc.Results.status;
 
-public class SubjectModule implements IEntity<Subject>{
+public class SubjectModule implements IModule<Subject>{
 
     private final EbeanServer ebeanServer;
     private final DatabaseExecutionContext executionContext;
@@ -85,5 +90,21 @@ public class SubjectModule implements IEntity<Subject>{
         }, executionContext);
     }
 
-    public CompletionStage<Optional<Boolean>>
+    public CompletionStage<Optional<Subject>> addStudentToSubject(Student student, String subjectID) {
+        return supplyAsync(() -> {
+            Transaction txn = ebeanServer.beginTransaction();
+            Optional<Subject> value = Optional.empty();
+            try {
+                Subject subject = ebeanServer.find(Subject.class).setId(subjectID).findOne();
+                if (subject != null) {
+                    subject.students.add(student);
+                    update(subjectID, subject);
+                    value = Optional.of(subject);
+                }
+            } finally {
+                txn.end();
+            }
+            return value;
+        }, executionContext);
+    }
 }
